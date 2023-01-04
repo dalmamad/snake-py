@@ -19,6 +19,9 @@ A_KEY = 97
 S_KEY = 115
 D_KEY = 100
 ESC_KEY = 27
+SELF_OVERLAP = "selfoverlap"
+OVERLAP = "overlap"
+EMPTY = "empty"
 
 # color
 BLACK = 30, 30, 30

@@ -9,6 +9,33 @@ from gameover import game_over
 clock = pygame.time.Clock()
 PLAY = True
 RETURN = 0
+GRID = {}
+
+
+def ADD_GRID(x, y, snake_index):
+    if str(x) + ":" + str(y) not in GRID:
+        GRID[str(x) + ":" + str(y)] = EMPTY
+    if GRID[str(x) + ":" + str(y)] != EMPTY:
+        if GRID[str(x) + ":" + str(y)] == str(snake_index):
+            GRID[str(x) + ":" + str(y)] = SELF_OVERLAP
+        else:
+            GRID[str(x) + ":" + str(y)] = OVERLAP
+    else:
+        GRID[str(x) + ":" + str(y)] = str(snake_index)
+
+
+def REMOVE_GRID(x, y):
+    GRID[str(x) + ":" + str(y)] = EMPTY
+
+
+def GET_GRID(x, y):
+    return GRID[str(x) + ":" + str(y)]
+
+
+def CLEAN_GRID():
+    for i in range(GRID_COUNT):
+        for j in range(GRID_COUNT):
+            GRID[str(i) + ":" + str(j)] = EMPTY
 
 
 class Snake:
@@ -16,7 +43,8 @@ class Snake:
     snakes_count = 0
 
     def __init__(self, color, init_len, init_dir, init_grid, counter, keys, index):
-        self.parts = [init_grid]
+        self.init_grid = init_grid
+        self.parts = []
         self.color = color
         self.keys = keys
         self.len = init_len
@@ -45,10 +73,11 @@ class Snake:
             dx = 1
         if self.dir == RIGHT:
             dx = -1
-        for index in range(1, self.len):
-            self.parts.append(
-                (self.parts[index - 1][0] + dx, self.parts[index - 1][1] + dy)
-            )
+        for index in range(0, self.len):
+            x = self.init_grid[0] + index * dx
+            y = self.init_grid[1] + index * dy
+            ADD_GRID(x, y, self.index)
+            self.parts.append((x, y))
 
     def turn(self, key):
         if key == self.keys[LEFT] and self.dir != RIGHT:
@@ -71,23 +100,31 @@ class Snake:
             dx = -1
         if self.dir == RIGHT:
             dx = 1
+        tailx = self.parts[len(self.parts) - 1][0]
+        taily = self.parts[len(self.parts) - 1][1]
+        REMOVE_GRID(tailx, taily)
         self.parts.pop()
         self.screen_exit = self.check_screen_exit(dx, dy)
         if self.screen_exit == False:
+            ADD_GRID(self.parts[0][0] + dx, self.parts[0][1] + dy, self.index)
             self.parts.insert(0, (self.parts[0][0] + dx, self.parts[0][1] + dy))
 
     def check_screen_exit(self, dx, dy):
         head = self.parts[0]
         if head[0] + dx == GRID_COUNT:
+            ADD_GRID(0, self.parts[0][1], self.index)
             self.parts.insert(0, (0, self.parts[0][1]))
             return True
         if head[0] + dx == -1:
+            ADD_GRID(GRID_COUNT - 1, self.parts[0][1], self.index)
             self.parts.insert(0, (GRID_COUNT - 1, self.parts[0][1]))
             return True
         if head[1] + dy == GRID_COUNT:
+            ADD_GRID(self.parts[0][0], 0, self.index)
             self.parts.insert(0, (self.parts[0][0], 0))
             return True
         if head[1] + dy == -1:
+            ADD_GRID(self.parts[0][0], GRID_COUNT - 1, self.index)
             self.parts.insert(0, (self.parts[0][0], GRID_COUNT - 1))
             return True
         return False
@@ -96,6 +133,7 @@ class Snake:
         for food in foods:
             if food.pos[0] == self.parts[0][0] and food.pos[1] == self.parts[0][1]:
                 self.eat = True
+                self.len += 1
                 self.score += 1
                 food.eated = True
                 last_index = len(self.parts) - 1
@@ -125,57 +163,44 @@ class Snake:
         if dy == -1 or dy == (GRID_COUNT - 1):
             self.tail_dir = DOWN
 
-    def check_self_collision(self):
-        global PLAY
-        global RETURN
-        head = self.parts[0]
-        for index, part in enumerate(self.parts):
-            if index > 2:
-                if head[0] == part[0] and head[1] == part[1]:
-                    game_info = {
-                        "players": self.__class__.snakes_count,
-                    }
-                    for index in range(self.__class__.snakes_count):
-                        game_info["score_" + str(index + 1)] = self.__class__.snakes[
-                            index
-                        ].score
-                        game_info[
-                            "snake" + str(index + 1) + "_color"
-                        ] = self.__class__.snakes[index].color
-                        if index != self.index:
-                            game_info["winner"] = index + 1
-                    RETURN = game_over(game_info)
-                    PLAY = False
-
     def check_collision(self):
         global PLAY
         global RETURN
-        for index, snake in enumerate(Snake.snakes):
-            if index != self.index:
-                head = self.parts[0]
-                for part in snake.parts:
-                    if head[0] == part[0] and head[1] == part[1]:
-                        game_info = {
-                            "players": self.__class__.snakes_count,
-                        }
-                        for index in range(self.__class__.snakes_count):
-                            game_info[
-                                "score_" + str(index + 1)
-                            ] = self.__class__.snakes[index].score
-                            game_info[
-                                "snake" + str(index + 1) + "_color"
-                            ] = self.__class__.snakes[index].color
-                            if index != self.index:
-                                game_info["winner"] = index + 1
-                        if part[0] == snake.parts[0][0] and part[1] == snake.parts[0][1]:
-                            if self.score > snake.score:
-                                game_info["winner"] = self.index + 1
-                            elif self.score < snake.score:
-                                game_info["winner"] = snake.index + 1
-                            else:
-                                game_info["winner"] = 0
-                        RETURN = game_over(game_info)
-                        PLAY = False
+        head = self.parts[0]
+        target_grid = GET_GRID(head[0], head[1])
+
+        if target_grid == SELF_OVERLAP or target_grid == OVERLAP:
+
+            game_info = {
+                "players": self.__class__.snakes_count,
+            }
+            for index in range(self.__class__.snakes_count):
+                game_info["score_" + str(index + 1)] = self.__class__.snakes[
+                    index
+                ].score
+                game_info["snake" + str(index + 1) + "_color"] = self.__class__.snakes[
+                    index
+                ].color
+                if index != self.index:
+                    game_info["winner"] = index + 1
+            if target_grid == OVERLAP:
+
+                for index, snake in enumerate(Snake.snakes):
+                    if (
+                        index != self.index
+                        and head[0] == snake.parts[0][0]
+                        and head[1] == snake.parts[0][1]
+                    ):
+                        print("hed")
+                        if self.score > snake.score:
+                            game_info["winner"] = self.index + 1
+                        elif self.score < snake.score:
+                            game_info["winner"] = snake.index + 1
+                        else:
+                            game_info["winner"] = 0
+
+            RETURN = game_over(game_info)
+            PLAY = False
 
     def mid_part_draw(self):
         last_index = len(self.parts) - 1
@@ -334,6 +359,7 @@ def the_game(players):
     global RETURN
     PLAY = True
     RETURN = 0
+    CLEAN_GRID()
     Snake.snakes_count = int(players)
     Snake.snakes = []
     foods = []
@@ -373,7 +399,6 @@ def the_game(players):
                 snake.eat = False
                 snake.dir = snake.turn_to
                 snake.move()
-                snake.check_self_collision()
                 snake.check_collision()
                 snake.check_eat(foods)
                 snake.update_tail_dir()
@@ -382,7 +407,8 @@ def the_game(players):
 
         for food in foods:
             food.check_eated(Snake.snakes)
-            food.draw()
+            if RETURN == 0:
+                food.draw()
 
         pygame.display.flip()
 
