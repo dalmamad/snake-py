@@ -2,7 +2,7 @@ import sys
 from screen import screen, pygame
 from setting import *
 
-font = pygame.font.SysFont('Hack', 32)
+font = pygame.font.Font(FONT, 20)
 
 
 def key_act(key):
@@ -25,7 +25,9 @@ class Gameover:
     frpos = GO_FRPOS
     game_info = {}
 
-    def __init__(self, index, text, bgcolor, select_color, txtcolor, bglen, bgpos, bggap):
+    def __init__(
+        self, index, text, bgcolor, select_color, txtcolor, bglen, bgpos, bggap
+    ):
         self.index = index
         self.text = text
         self.bgcolor = bgcolor
@@ -39,40 +41,75 @@ class Gameover:
         bgcolor = self.bgcolor
         if self.index == self.__class__.selector:
             bgcolor = self.select_color
-        pygame.draw.rect(screen, bgcolor, pygame.Rect(
-            self.bgpos[0], self.bgpos[1] + self.index*(self.bglen[1]+self.bggap), self.bglen[0], self.bglen[1]))
+        pygame.draw.rect(
+            screen,
+            bgcolor,
+            pygame.Rect(
+                self.bgpos[0],
+                self.bgpos[1] + self.index * (self.bglen[1] + self.bggap),
+                self.bglen[0],
+                self.bglen[1],
+            ),
+        )
 
     def txtdraw(self):
         txt = font.render(self.text, True, self.txtcolor)
         txt_width = txt.get_width()
         txt_height = txt.get_height()
-        screen.blit(txt, (self.bgpos[0]+(self.bglen[0]-txt_width)/2, self.bgpos[1] +
-                    self.index*(self.bglen[1]+self.bggap)+(self.bglen[1]-txt_height)/2))
+        screen.blit(
+            txt,
+            (
+                self.bgpos[0] + (self.bglen[0] - txt_width) / 2,
+                self.bgpos[1]
+                + self.index * (self.bglen[1] + self.bggap)
+                + (self.bglen[1] - txt_height) / 2,
+            ),
+        )
 
     @classmethod
     def draw_frame(cls):
-        pygame.draw.rect(screen, cls.frcolor, pygame.Rect(
-            cls.frpos[0], cls.frpos[1], cls.frlen[0], cls.frlen[1]))
+        pygame.draw.rect(
+            screen,
+            cls.frcolor,
+            pygame.Rect(cls.frpos[0], cls.frpos[1], cls.frlen[0], cls.frlen[1]),
+        )
 
     @classmethod
     def draw_txt(cls):
-        for index in range(int(cls.game_info['players'])):
-            snake_color = cls.game_info['snake'+str(index+1)+'_color']
-            txt = font.render('snake'+str(index+1)+' score : ' +
-                              str(cls.game_info['score_'+str(index+1)]), True, snake_color)
+        for index in range(int(cls.game_info["players"])):
+            snake_color = cls.game_info["snake" + str(index + 1) + "_color"]
+            txt = font.render(
+                "Score : " + str(cls.game_info["score_" + str(index + 1)]),
+                True,
+                snake_color,
+            )
             txt_width = txt.get_width()
             txt_height = txt.get_height()
             screen.blit(
-                txt, (cls.frpos[0]+(cls.frlen[0]-txt_width)/2, cls.frpos[1]*1.3 + index*txt_height*1.3))
-        if (cls.game_info['players']) > 1:
-            winner_color = cls.game_info['snake' +
-                                         str(cls.game_info['winner'])+'_color']
-            txt = font.render(
-                'snake ' + str(cls.game_info['winner'])+' won', True, winner_color)
+                txt,
+                (
+                    cls.frpos[0] + (cls.frlen[0] - txt_width) / 2,
+                    cls.frpos[1] * 1.3 + index * txt_height * 1.3,
+                ),
+            )
+        if (cls.game_info["players"]) > 1:
+            winner_color = cls.game_info[
+                "snake" + str(cls.game_info["winner"]) + "_color"
+            ]
+            # txt = font.render(
+            #     "snake" + str(cls.game_info["winner"]) + " won", True, winner_color
+            # )
+            txt = font.render("ThisColorWon", True, winner_color)
             txt_width = txt.get_width()
             txt_height = txt.get_height()
-            screen.blit(txt, (cls.frpos[0]+(cls.frlen[0]-txt_width)/2,
-                        cls.frpos[1]*1.3 + int(cls.game_info['players'])*txt_height*1.5))
+            screen.blit(
+                txt,
+                (
+                    cls.frpos[0] + (cls.frlen[0] - txt_width) / 2,
+                    cls.frpos[1] * 1.3
+                    + int(cls.game_info["players"]) * txt_height * 1.5,
+                ),
+            )
 
     @classmethod
     def change_select(cls, dir):
@@ -98,16 +135,37 @@ class Gameover:
             cls.end = MENU
 
 
-Gameover.options.append(Gameover(0, 'play-again', GO_OPCOLOR,
-                        GO_SELECT_COLOR, GO_TXTCOLOR, GO_OPLEN, GO_OPPOS, GO_OPGAP))
-Gameover.options.append(Gameover(1, 'menu', GO_OPCOLOR,
-                        GO_SELECT_COLOR, GO_TXTCOLOR, GO_OPLEN, GO_OPPOS, GO_OPGAP))
+Gameover.options.append(
+    Gameover(
+        0,
+        "PlayAgain",
+        GO_OPCOLOR,
+        GO_SELECT_COLOR,
+        GO_TXTCOLOR,
+        GO_OPLEN,
+        GO_OPPOS,
+        GO_OPGAP,
+    )
+)
+Gameover.options.append(
+    Gameover(
+        1,
+        "Menu",
+        GO_OPCOLOR,
+        GO_SELECT_COLOR,
+        GO_TXTCOLOR,
+        GO_OPLEN,
+        GO_OPPOS,
+        GO_OPGAP,
+    )
+)
 
 
 def game_over(game_info):
     Gameover.game_info = game_info
     Gameover.menu = True
-    Gameover.draw_frame()
+    screen.fill(MENU_BGCOLOR)
+    # Gameover.draw_frame()
     Gameover.selector = 0
     Gameover.draw_txt()
 

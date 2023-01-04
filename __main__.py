@@ -4,10 +4,7 @@ from setting import *
 from game import the_game
 
 screen.fill(MENU_BGCOLOR)
-font = pygame.font.SysFont("Hack", 32)
-text = font.render("PRESS ENTER", True, TEXT_COLOR)
-screen.blit(text, (20, 20))
-pygame.display.update()
+font = pygame.font.Font(FONT, 33)
 
 
 def key_act(key):
@@ -22,7 +19,6 @@ def key_act(key):
 class Option:
     selector = 0
     options = []
-    txtcolor = TEXT_COLOR
 
     def __init__(
         self, index, text, bgcolor, select_color, txtcolor, players, bglen, bgpos, bggap
@@ -67,38 +63,6 @@ class Option:
         )
 
     @classmethod
-    def draw_txt(cls):
-        keys = ["w,a,s,d", "arrows"]
-        lines = [
-            "in 2 player the loser is a snake",
-            "that collides with itself or another snake",
-        ]
-        for index in range(2):
-            txt = font.render(
-                "snake" + str(index + 1) + " keys : " + keys[index], True, cls.txtcolor
-            )
-            txt_width = txt.get_width()
-            txt_height = txt.get_height()
-            screen.blit(
-                txt,
-                (
-                    (WIN_WIDTH - txt_width) / 2,
-                    0.2 * WIN_HEIGHT + index * txt_height * 1.3,
-                ),
-            )
-        for index in range(len(lines)):
-            txt = font.render(lines[index], True, cls.txtcolor)
-            txt_width = txt.get_width()
-            txt_height = txt.get_height()
-            screen.blit(
-                txt,
-                (
-                    (WIN_WIDTH - txt_width) / 2,
-                    0.2 * WIN_HEIGHT + 2 * txt_height * 1.5 + index * txt_height * 1.3,
-                ),
-            )
-
-    @classmethod
     def change_select(cls, dir):
         cls.options[cls.selector].selected = False
         if dir == DOWN:
@@ -122,12 +86,19 @@ class Option:
             res = the_game(players)
             while res == PLAY_AGAIN:
                 res = the_game(players)
+            Option.draw_img()
+
+    @classmethod
+    def draw_img(cls):
+        img = pygame.image.load(MENU_IMG)
+        img = pygame.transform.scale(img, (WIN_WIDTH, WIN_HEIGHT))
+        screen.blit(img, (0, 0))
 
 
 Option.options.append(
     Option(
         0,
-        "1-player",
+        "Solo",
         OPTION_BGCOLOR,
         OPTION_SELECT_COLOR,
         OPTION_TXTCOLOR,
@@ -140,7 +111,7 @@ Option.options.append(
 Option.options.append(
     Option(
         1,
-        "2-player",
+        "WithFriend",
         OPTION_BGCOLOR,
         OPTION_SELECT_COLOR,
         OPTION_TXTCOLOR,
@@ -153,7 +124,7 @@ Option.options.append(
 Option.options.append(
     Option(
         2,
-        "exit",
+        "Exit",
         OPTION_BGCOLOR,
         OPTION_SELECT_COLOR,
         OPTION_TXTCOLOR,
@@ -167,9 +138,9 @@ Option.options.append(
 
 def main():
     on_menu = True
+    # screen.fill(MENU_BGCOLOR)
+    Option.draw_img()
     while on_menu:
-        screen.fill(MENU_BGCOLOR)
-        Option.draw_txt()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()

@@ -122,9 +122,6 @@ class Snake:
             self.tail_dir = UP
         if dy == -1 or dy == (GRID_COUNT - 1):
             self.tail_dir = DOWN
-        print(dx)
-        print(dy)
-        print(self.tail_dir)
 
     def check_self_collision(self):
         global PLAY

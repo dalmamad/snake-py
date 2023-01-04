@@ -1,3 +1,5 @@
+import os
+
 # var
 RIGHT = "right"
 LEFT = "left"
@@ -17,29 +19,40 @@ S_KEY = 115
 D_KEY = 100
 ESC_KEY = 27
 
+# color
+BLACK = 30, 30, 30
+WHITE = 230, 230, 230
+GREEN = 78, 245, 231
+BLUE = 121, 205, 247
+YELLOW = 226, 242, 133
+
+# file
+DIR = os.path.dirname(os.path.realpath(__file__))
+FONT = str(DIR) + "/files/OpenSans-Bold.ttf"
+MENU_IMG = str(DIR) + "/files/menu-img.jpg"
+
 # window
 WIN_TITLE = "snake game"
 WIN_BGCOLOR = "black"
-WIN_WIDTH = 900
-WIN_HEIGHT = 900
+WIN_WIDTH = 1000
+WIN_HEIGHT = 1000
 
 # menu
-MENU_BGCOLOR = r, g, b = 0, 0, 0
-TEXT_COLOR = r, g, b = 255, 255, 255
-OPTION_BGCOLOR = r, g, b = 90, 42, 66
-OPTION_SELECT_COLOR = r, g, b = 90, 0, 66
-OPTION_TXTCOLOR = r, g, b = 0, 4, 100
-OPTION_BGLEN = width, height = WIN_WIDTH / 4, WIN_WIDTH / 10
-OPTION_BGPOS = x, y = (WIN_WIDTH - OPTION_BGLEN[0]) / 2, WIN_HEIGHT / 2
-OPTION_BGGAP = WIN_WIDTH / 30
+MENU_BGCOLOR = BLACK
+OPTION_BGCOLOR = WHITE
+OPTION_SELECT_COLOR = GREEN
+OPTION_TXTCOLOR = BLACK
+OPTION_BGLEN = width, height = WIN_WIDTH / 5, WIN_WIDTH / 15
+OPTION_BGPOS = x, y = (WIN_WIDTH - OPTION_BGLEN[0]) / 2, WIN_HEIGHT / 1.5
+OPTION_BGGAP = OPTION_BGLEN[1] / 10
 
 # pause-menu
 PAUSE_FRLEN = width, height = WIN_WIDTH / 2, WIN_HEIGHT / 2
 PAUSE_FRPOS = x, y = (WIN_WIDTH - PAUSE_FRLEN[0]) / 2, (WIN_HEIGHT - PAUSE_FRLEN[1]) / 2
-PAUSE_FRCOLOR = r, g, b = 12, 44, 55
-PAUSE_OPCOLOR = r, g, b = 90, 42, 66
-PAUSE_SELECT_COLOR = r, g, b = 90, 0, 66
-PAUSE_TXTCOLOR = r, g, b = 0, 4, 100
+PAUSE_FRCOLOR = r, g, b = BLACK
+PAUSE_OPCOLOR = r, g, b = WHITE
+PAUSE_SELECT_COLOR = r, g, b = GREEN
+PAUSE_TXTCOLOR = r, g, b = BLACK
 PAUSE_OPLEN = width, height = PAUSE_FRLEN[0] / 4, PAUSE_FRLEN[1] / 10
 PAUSE_OPGAP = PAUSE_FRLEN[0] / 30
 PAUSE_OPPOS = x, y = (
@@ -50,11 +63,11 @@ PAUSE_OPPOS = x, y = (
 # game-over
 GO_FRLEN = width, height = WIN_WIDTH / 2, WIN_HEIGHT / 2
 GO_FRPOS = x, y = (WIN_WIDTH - GO_FRLEN[0]) / 2, (WIN_HEIGHT - GO_FRLEN[1]) / 2
-GO_FRCOLOR = r, g, b = 12, 44, 55
+GO_FRCOLOR = BLACK
 GO_FR_TXTCOLOR = r, g, b = 48, 90, 22
-GO_OPCOLOR = r, g, b = 90, 42, 66
-GO_SELECT_COLOR = r, g, b = 90, 0, 66
-GO_TXTCOLOR = r, g, b = 0, 4, 100
+GO_OPCOLOR = WHITE
+GO_SELECT_COLOR = GREEN
+GO_TXTCOLOR = BLACK
 GO_OPLEN = width, height = GO_FRLEN[0] / 4, GO_FRLEN[1] / 10
 GO_OPGAP = GO_FRLEN[0] / 30
 GO_OPPOS = x, y = (
@@ -63,13 +76,13 @@ GO_OPPOS = x, y = (
 )
 
 # game
-GAME_BGCOLOR = r, g, b = 50, 50, 50
+GAME_BGCOLOR = BLACK
 GRID_COUNT = 50
 GRID_SIZE = WIN_WIDTH / GRID_COUNT
 
 # snakes
 SNAKES_SHAPE = ["square", "square"]
-SNAKES_COLOR = [(255, 255, 255), (255, 255, 255)]
+SNAKES_COLOR = [(BLUE), (YELLOW)]
 SNAKES_INIT_LEN = [10, 10]
 SNAKES_INIT_DIR = [DOWN, DOWN]
 SNAKES_INIT_GRID = [(15, 5), (5, 15)]
@@ -77,8 +90,8 @@ SNAKES_THICKNESS = GRID_SIZE
 SNAKES_KEYS = [
     {LEFT: A_KEY, RIGHT: D_KEY, UP: W_KEY, DOWN: S_KEY},
     {LEFT: LEFT_ARROW, RIGHT: RIGHT_ARROW, UP: UP_ARROW, DOWN: DOWN_ARROW},
-]  # adws , arrows
-SNAKES_MAX_COUNTER = [30, 100]
+]
+SNAKES_MAX_COUNTER = [40, 40]
 
 # key
 PLAYER1_LEFT = 97  # a
@@ -87,4 +100,4 @@ PLAYER1_UP = 119  # w
 PLAYER1_DOWN = 115  # s
 
 # food
-FOOD_COLOR = r, g, b = 150, 0, 150
+FOOD_COLOR = WHITE

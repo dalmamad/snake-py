@@ -2,7 +2,7 @@ import sys
 from screen import screen, pygame
 from setting import *
 
-font = pygame.font.SysFont('Hack', 32)
+font = pygame.font.Font(FONT, 20)
 
 
 def key_act(key):
@@ -23,7 +23,9 @@ class Pause:
     frlen = PAUSE_FRLEN
     frpos = PAUSE_FRPOS
 
-    def __init__(self, index, text, bgcolor, select_color, txtcolor, bglen, bgpos, bggap):
+    def __init__(
+        self, index, text, bgcolor, select_color, txtcolor, bglen, bgpos, bggap
+    ):
         self.index = index
         self.text = text
         self.bgcolor = bgcolor
@@ -37,20 +39,38 @@ class Pause:
         bgcolor = self.bgcolor
         if self.index == self.__class__.selector:
             bgcolor = self.select_color
-        pygame.draw.rect(screen, bgcolor, pygame.Rect(
-            self.bgpos[0], self.bgpos[1] + self.index*(self.bglen[1]+self.bggap), self.bglen[0], self.bglen[1]))
+        pygame.draw.rect(
+            screen,
+            bgcolor,
+            pygame.Rect(
+                self.bgpos[0],
+                self.bgpos[1] + self.index * (self.bglen[1] + self.bggap),
+                self.bglen[0],
+                self.bglen[1],
+            ),
+        )
 
     def txtdraw(self):
         txt = font.render(self.text, True, self.txtcolor)
         txt_width = txt.get_width()
         txt_height = txt.get_height()
-        screen.blit(txt, (self.bgpos[0]+(self.bglen[0]-txt_width)/2, self.bgpos[1] +
-                    self.index*(self.bglen[1]+self.bggap)+(self.bglen[1]-txt_height)/2))
+        screen.blit(
+            txt,
+            (
+                self.bgpos[0] + (self.bglen[0] - txt_width) / 2,
+                self.bgpos[1]
+                + self.index * (self.bglen[1] + self.bggap)
+                + (self.bglen[1] - txt_height) / 2,
+            ),
+        )
 
     @classmethod
     def draw_frame(cls):
-        pygame.draw.rect(screen, cls.frcolor, pygame.Rect(
-            cls.frpos[0], cls.frpos[1], cls.frlen[0], cls.frlen[1]))
+        pygame.draw.rect(
+            screen,
+            cls.frcolor,
+            pygame.Rect(cls.frpos[0], cls.frpos[1], cls.frlen[0], cls.frlen[1]),
+        )
 
     @classmethod
     def change_select(cls, dir):
@@ -76,17 +96,37 @@ class Pause:
             cls.end = MENU
 
 
-Pause.options.append(Pause(0, 'Resume', PAUSE_OPCOLOR, PAUSE_SELECT_COLOR,
-                     PAUSE_TXTCOLOR, PAUSE_OPLEN, PAUSE_OPPOS, PAUSE_OPGAP))
-Pause.options.append(Pause(1, 'menu', PAUSE_OPCOLOR, PAUSE_SELECT_COLOR,
-                     PAUSE_TXTCOLOR, PAUSE_OPLEN, PAUSE_OPPOS, PAUSE_OPGAP))
+Pause.options.append(
+    Pause(
+        0,
+        "Resume",
+        PAUSE_OPCOLOR,
+        PAUSE_SELECT_COLOR,
+        PAUSE_TXTCOLOR,
+        PAUSE_OPLEN,
+        PAUSE_OPPOS,
+        PAUSE_OPGAP,
+    )
+)
+Pause.options.append(
+    Pause(
+        1,
+        "Menu",
+        PAUSE_OPCOLOR,
+        PAUSE_SELECT_COLOR,
+        PAUSE_TXTCOLOR,
+        PAUSE_OPLEN,
+        PAUSE_OPPOS,
+        PAUSE_OPGAP,
+    )
+)
 
 
 def pause_game():
 
     Pause.pause = True
     Pause.selector = 0
-    Pause.draw_frame()
+    # Pause.draw_frame()
 
     while Pause.pause:
 
