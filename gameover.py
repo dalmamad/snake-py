@@ -2,7 +2,7 @@ import sys
 from screen import screen, pygame
 from setting import *
 
-font = pygame.font.Font(FONT, 20)
+font = pygame.font.Font(FONT, FONT_SIZE_PAUSE)
 
 
 def key_act(key):
@@ -92,7 +92,7 @@ class Gameover:
                     cls.frpos[1] * 1.3 + index * txt_height * 1.3,
                 ),
             )
-        if (cls.game_info["players"]) > 1:
+        if (cls.game_info["players"]) > 1 and cls.game_info["winner"] != 0:
             winner_color = cls.game_info[
                 "snake" + str(cls.game_info["winner"]) + "_color"
             ]

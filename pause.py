@@ -2,7 +2,7 @@ import sys
 from screen import screen, pygame
 from setting import *
 
-font = pygame.font.Font(FONT, 20)
+font = pygame.font.Font(FONT, FONT_SIZE_PAUSE)
 
 
 def key_act(key):

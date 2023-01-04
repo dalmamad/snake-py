@@ -5,6 +5,8 @@ from screen import screen, pygame
 from pause import pause_game
 from gameover import game_over
 
+
+clock = pygame.time.Clock()
 PLAY = True
 RETURN = 0
 
@@ -153,7 +155,6 @@ class Snake:
                 head = self.parts[0]
                 for part in snake.parts:
                     if head[0] == part[0] and head[1] == part[1]:
-                        PLAY = False
                         game_info = {
                             "players": self.__class__.snakes_count,
                         }
@@ -166,6 +167,13 @@ class Snake:
                             ] = self.__class__.snakes[index].color
                             if index != self.index:
                                 game_info["winner"] = index + 1
+                        if part[0] == snake.parts[0][0] and part[1] == snake.parts[0][1]:
+                            if self.score > snake.score:
+                                game_info["winner"] = self.index + 1
+                            elif self.score < snake.score:
+                                game_info["winner"] = snake.index + 1
+                            else:
+                                game_info["winner"] = 0
                         RETURN = game_over(game_info)
                         PLAY = False
 
@@ -344,9 +352,7 @@ def the_game(players):
         foods.append(Food(FOOD_COLOR, Snake.snakes))
 
     while PLAY:
-
-        pygame.time.wait(1)
-
+        clock.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()

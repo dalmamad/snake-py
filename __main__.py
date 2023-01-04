@@ -4,7 +4,7 @@ from setting import *
 from game import the_game
 
 screen.fill(MENU_BGCOLOR)
-font = pygame.font.Font(FONT, 33)
+font = pygame.font.Font(FONT, FONT_SIZE_MAIN)
 
 
 def key_act(key):

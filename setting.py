@@ -1,4 +1,5 @@
 import os
+import sys
 
 # var
 RIGHT = "right"
@@ -28,14 +29,18 @@ YELLOW = 226, 242, 133
 
 # file
 DIR = os.path.dirname(os.path.realpath(__file__))
+if getattr(sys, "frozen", False):
+    DIR = os.path.dirname(sys.executable)
 FONT = str(DIR) + "/files/OpenSans-Bold.ttf"
 MENU_IMG = str(DIR) + "/files/menu-img.jpg"
 
 # window
 WIN_TITLE = "snake game"
 WIN_BGCOLOR = "black"
-WIN_WIDTH = 1000
-WIN_HEIGHT = 1000
+WIN_WIDTH = 900
+WIN_HEIGHT = WIN_WIDTH
+FONT_SIZE_MAIN = round(WIN_WIDTH / 30)
+FONT_SIZE_PAUSE = round(WIN_WIDTH / 50)
 
 # menu
 MENU_BGCOLOR = BLACK
@@ -79,19 +84,20 @@ GO_OPPOS = x, y = (
 GAME_BGCOLOR = BLACK
 GRID_COUNT = 50
 GRID_SIZE = WIN_WIDTH / GRID_COUNT
+FPS = 300
 
 # snakes
 SNAKES_SHAPE = ["square", "square"]
 SNAKES_COLOR = [(BLUE), (YELLOW)]
 SNAKES_INIT_LEN = [10, 10]
-SNAKES_INIT_DIR = [DOWN, DOWN]
-SNAKES_INIT_GRID = [(15, 5), (5, 15)]
+SNAKES_INIT_DIR = [DOWN, UP]
+SNAKES_INIT_GRID = [(15, 10), (35, 40)]
 SNAKES_THICKNESS = GRID_SIZE
 SNAKES_KEYS = [
     {LEFT: A_KEY, RIGHT: D_KEY, UP: W_KEY, DOWN: S_KEY},
     {LEFT: LEFT_ARROW, RIGHT: RIGHT_ARROW, UP: UP_ARROW, DOWN: DOWN_ARROW},
 ]
-SNAKES_MAX_COUNTER = [40, 40]
+SNAKES_MAX_COUNTER = [30, 30]
 
 # key
 PLAYER1_LEFT = 97  # a
