@@ -4,11 +4,12 @@ from setting import *
 from screen import screen, pygame
 from pause import pause_game
 from gameover import game_over
+
 PLAY = True
 RETURN = 0
 
 
-class Snake():
+class Snake:
     snakes = []
     snakes_count = 0
 
@@ -44,7 +45,8 @@ class Snake():
             dx = -1
         for index in range(1, self.len):
             self.parts.append(
-                (self.parts[index - 1][0] + dx, self.parts[index - 1][1] + dy))
+                (self.parts[index - 1][0] + dx, self.parts[index - 1][1] + dy)
+            )
 
     def turn(self, key):
         if key == self.keys[LEFT] and self.dir != RIGHT:
@@ -70,7 +72,7 @@ class Snake():
         self.parts.pop()
         self.screen_exit = self.check_screen_exit(dx, dy)
         if self.screen_exit == False:
-            self.parts.insert(0, (self.parts[0][0]+dx, self.parts[0][1]+dy))
+            self.parts.insert(0, (self.parts[0][0] + dx, self.parts[0][1] + dy))
 
     def check_screen_exit(self, dx, dy):
         head = self.parts[0]
@@ -98,9 +100,9 @@ class Snake():
                 last_part = self.parts[last_index]
 
                 if self.tail_dir == LEFT:
-                    self.parts.append((last_part[0]+1, last_part[1]))
+                    self.parts.append((last_part[0] + 1, last_part[1]))
                 if self.tail_dir == RIGHT:
-                    self.parts.append((last_part[0]-1, last_part[1]))
+                    self.parts.append((last_part[0] - 1, last_part[1]))
                 if self.tail_dir == UP:
                     self.parts.append((last_part[0], last_part[1] + 1))
                 if self.tail_dir == DOWN:
@@ -112,14 +114,17 @@ class Snake():
         nextto_last = self.parts[last_index - 1]
         dx = last_part[0] - nextto_last[0]
         dy = last_part[1] - nextto_last[1]
-        if dx == 1:
+        if dx == 1 or dx == -(GRID_COUNT - 1):
             self.tail_dir = LEFT
-        if dx == -1:
+        if dx == -1 or dx == (GRID_COUNT - 1):
             self.tail_dir = RIGHT
-        if dy == 1:
+        if dy == 1 or dy == -(GRID_COUNT - 1):
             self.tail_dir = UP
-        if dy == -1:
+        if dy == -1 or dy == (GRID_COUNT - 1):
             self.tail_dir = DOWN
+        print(dx)
+        print(dy)
+        print(self.tail_dir)
 
     def check_self_collision(self):
         global PLAY
@@ -129,15 +134,17 @@ class Snake():
             if index > 2:
                 if head[0] == part[0] and head[1] == part[1]:
                     game_info = {
-                        'players': self.__class__.snakes_count,
+                        "players": self.__class__.snakes_count,
                     }
                     for index in range(self.__class__.snakes_count):
-                        game_info['score_' +
-                                  str(index+1)] = self.__class__.snakes[index].score
-                        game_info['snake'+str(index+1) +
-                                  '_color'] = self.__class__.snakes[index].color
+                        game_info["score_" + str(index + 1)] = self.__class__.snakes[
+                            index
+                        ].score
+                        game_info[
+                            "snake" + str(index + 1) + "_color"
+                        ] = self.__class__.snakes[index].color
                         if index != self.index:
-                            game_info['winner'] = index + 1
+                            game_info["winner"] = index + 1
                     RETURN = game_over(game_info)
                     PLAY = False
 
@@ -151,15 +158,17 @@ class Snake():
                     if head[0] == part[0] and head[1] == part[1]:
                         PLAY = False
                         game_info = {
-                            'players': self.__class__.snakes_count,
+                            "players": self.__class__.snakes_count,
                         }
                         for index in range(self.__class__.snakes_count):
-                            game_info['score_' +
-                                      str(index+1)] = self.__class__.snakes[index].score
-                            game_info['snake'+str(index+1) +
-                                      '_color'] = self.__class__.snakes[index].color
+                            game_info[
+                                "score_" + str(index + 1)
+                            ] = self.__class__.snakes[index].score
+                            game_info[
+                                "snake" + str(index + 1) + "_color"
+                            ] = self.__class__.snakes[index].color
                             if index != self.index:
-                                game_info['winner'] = index + 1
+                                game_info["winner"] = index + 1
                         RETURN = game_over(game_info)
                         PLAY = False
 
@@ -167,8 +176,13 @@ class Snake():
         last_index = len(self.parts) - 1
         for index, part in enumerate(self.parts):
             if index != last_index and index != 0:
-                pygame.draw.rect(screen, self.color, pygame.Rect(
-                    part[0] * GRID_SIZE, part[1] * GRID_SIZE, GRID_SIZE, GRID_SIZE))
+                pygame.draw.rect(
+                    screen,
+                    self.color,
+                    pygame.Rect(
+                        part[0] * GRID_SIZE, part[1] * GRID_SIZE, GRID_SIZE, GRID_SIZE
+                    ),
+                )
 
     def smooth_draw(self):
         layer = self.counter / self.max_counter * GRID_SIZE
@@ -181,35 +195,95 @@ class Snake():
             self.mid_part_draw()
 
         if self.eat == False:
-            pygame.draw.rect(screen, GAME_BGCOLOR, pygame.Rect(
-                tail[0] * GRID_SIZE, tail[1] * GRID_SIZE, GRID_SIZE, GRID_SIZE))
+            pygame.draw.rect(
+                screen,
+                GAME_BGCOLOR,
+                pygame.Rect(
+                    tail[0] * GRID_SIZE, tail[1] * GRID_SIZE, GRID_SIZE, GRID_SIZE
+                ),
+            )
             if self.tail_dir == UP:
-                pygame.draw.rect(screen, self.color, pygame.Rect(
-                    tail[0] * GRID_SIZE, tail[1] * GRID_SIZE, GRID_SIZE, GRID_SIZE - layer))
+                pygame.draw.rect(
+                    screen,
+                    self.color,
+                    pygame.Rect(
+                        tail[0] * GRID_SIZE,
+                        tail[1] * GRID_SIZE,
+                        GRID_SIZE,
+                        GRID_SIZE - layer,
+                    ),
+                )
             if self.tail_dir == DOWN:
-                pygame.draw.rect(screen, self.color, pygame.Rect(
-                    tail[0] * GRID_SIZE, tail[1] * GRID_SIZE + layer, GRID_SIZE, GRID_SIZE))
+                pygame.draw.rect(
+                    screen,
+                    self.color,
+                    pygame.Rect(
+                        tail[0] * GRID_SIZE,
+                        tail[1] * GRID_SIZE + layer,
+                        GRID_SIZE,
+                        GRID_SIZE,
+                    ),
+                )
             if self.tail_dir == LEFT:
-                pygame.draw.rect(screen, self.color, pygame.Rect(
-                    tail[0] * GRID_SIZE, tail[1] * GRID_SIZE, GRID_SIZE - layer, GRID_SIZE))
+                pygame.draw.rect(
+                    screen,
+                    self.color,
+                    pygame.Rect(
+                        tail[0] * GRID_SIZE,
+                        tail[1] * GRID_SIZE,
+                        GRID_SIZE - layer,
+                        GRID_SIZE,
+                    ),
+                )
             if self.tail_dir == RIGHT:
-                pygame.draw.rect(screen, self.color, pygame.Rect(
-                    tail[0] * GRID_SIZE + layer, tail[1] * GRID_SIZE, GRID_SIZE, GRID_SIZE))
+                pygame.draw.rect(
+                    screen,
+                    self.color,
+                    pygame.Rect(
+                        tail[0] * GRID_SIZE + layer,
+                        tail[1] * GRID_SIZE,
+                        GRID_SIZE,
+                        GRID_SIZE,
+                    ),
+                )
 
         if self.dir == UP:
-            pygame.draw.rect(screen, self.color, pygame.Rect(
-                head[0] * GRID_SIZE, (head[1]+1) * GRID_SIZE - layer, GRID_SIZE,  layer*1.5))
+            pygame.draw.rect(
+                screen,
+                self.color,
+                pygame.Rect(
+                    head[0] * GRID_SIZE,
+                    (head[1] + 1) * GRID_SIZE - layer,
+                    GRID_SIZE,
+                    layer * 1.5,
+                ),
+            )
         if self.dir == DOWN:
-            pygame.draw.rect(screen, self.color, pygame.Rect(
-                head[0] * GRID_SIZE, head[1] * GRID_SIZE, GRID_SIZE, layer))
+            pygame.draw.rect(
+                screen,
+                self.color,
+                pygame.Rect(head[0] * GRID_SIZE, head[1] * GRID_SIZE, GRID_SIZE, layer),
+            )
         if self.dir == LEFT:
-            pygame.draw.rect(screen, self.color, pygame.Rect(
-                (head[0]+1) * GRID_SIZE - layer, head[1] * GRID_SIZE, layer*1.5, GRID_SIZE))
+            pygame.draw.rect(
+                screen,
+                self.color,
+                pygame.Rect(
+                    (head[0] + 1) * GRID_SIZE - layer,
+                    head[1] * GRID_SIZE,
+                    layer * 1.5,
+                    GRID_SIZE,
+                ),
+            )
         if self.dir == RIGHT:
-            pygame.draw.rect(screen, self.color, pygame.Rect(
-                head[0] * GRID_SIZE, head[1] * GRID_SIZE, layer, GRID_SIZE))
+            pygame.draw.rect(
+                screen,
+                self.color,
+                pygame.Rect(head[0] * GRID_SIZE, head[1] * GRID_SIZE, layer, GRID_SIZE),
+            )
 
-class Food():
+
+class Food:
     def __init__(self, color, snakes):
         self.color = color
         self.pos = (0, 0)
@@ -239,22 +313,37 @@ class Food():
             self.create(snakes)
 
     def draw(self):
-        pygame.draw.rect(screen, self.color, pygame.Rect(
-            self.pos[0] * GRID_SIZE, self.pos[1] * GRID_SIZE, GRID_SIZE, GRID_SIZE))
+        pygame.draw.rect(
+            screen,
+            self.color,
+            pygame.Rect(
+                self.pos[0] * GRID_SIZE, self.pos[1] * GRID_SIZE, GRID_SIZE, GRID_SIZE
+            ),
+        )
 
 
 def the_game(players):
     screen.fill(GAME_BGCOLOR)
     global PLAYERS
     global PLAY
+    global RETURN
     PLAY = True
+    RETURN = 0
     Snake.snakes_count = int(players)
     Snake.snakes = []
     foods = []
     for index in range(players):
-        Snake.snakes.append(Snake(SNAKES_COLOR[index], SNAKES_INIT_LEN[index],
-                                  SNAKES_INIT_DIR[index], SNAKES_INIT_GRID[index],
-                                  SNAKES_MAX_COUNTER[index], SNAKES_KEYS[index], index))
+        Snake.snakes.append(
+            Snake(
+                SNAKES_COLOR[index],
+                SNAKES_INIT_LEN[index],
+                SNAKES_INIT_DIR[index],
+                SNAKES_INIT_GRID[index],
+                SNAKES_MAX_COUNTER[index],
+                SNAKES_KEYS[index],
+                index,
+            )
+        )
         foods.append(Food(FOOD_COLOR, Snake.snakes))
 
     while PLAY:

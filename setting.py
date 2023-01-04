@@ -1,11 +1,11 @@
 # var
-RIGHT = 'right'
-LEFT = 'left'
-DOWN = 'down'
-UP = 'up'
-MENU = 'menu'
-RESUME = 'resume'
-PLAY_AGAIN = 'play-again'
+RIGHT = "right"
+LEFT = "left"
+DOWN = "down"
+UP = "up"
+MENU = "menu"
+RESUME = "resume"
+PLAY_AGAIN = "play-again"
 UP_ARROW = 1073741906
 DOWN_ARROW = 1073741905
 LEFT_ARROW = 1073741904
@@ -18,8 +18,8 @@ D_KEY = 100
 ESC_KEY = 27
 
 # window
-WIN_TITLE = 'snake game'
-WIN_BGCOLOR = 'black'
+WIN_TITLE = "snake game"
+WIN_BGCOLOR = "black"
 WIN_WIDTH = 900
 WIN_HEIGHT = 900
 
@@ -29,51 +29,56 @@ TEXT_COLOR = r, g, b = 255, 255, 255
 OPTION_BGCOLOR = r, g, b = 90, 42, 66
 OPTION_SELECT_COLOR = r, g, b = 90, 0, 66
 OPTION_TXTCOLOR = r, g, b = 0, 4, 100
-OPTION_BGLEN = width, height = WIN_WIDTH/4, WIN_WIDTH/10
-OPTION_BGPOS = x, y = (WIN_WIDTH-OPTION_BGLEN[0])/2, WIN_HEIGHT/2
-OPTION_BGGAP = WIN_WIDTH/30
+OPTION_BGLEN = width, height = WIN_WIDTH / 4, WIN_WIDTH / 10
+OPTION_BGPOS = x, y = (WIN_WIDTH - OPTION_BGLEN[0]) / 2, WIN_HEIGHT / 2
+OPTION_BGGAP = WIN_WIDTH / 30
 
 # pause-menu
-PAUSE_FRLEN = width, height = WIN_WIDTH/2, WIN_HEIGHT/2
-PAUSE_FRPOS = x, y = (
-    WIN_WIDTH - PAUSE_FRLEN[0])/2, (WIN_HEIGHT - PAUSE_FRLEN[1])/2
+PAUSE_FRLEN = width, height = WIN_WIDTH / 2, WIN_HEIGHT / 2
+PAUSE_FRPOS = x, y = (WIN_WIDTH - PAUSE_FRLEN[0]) / 2, (WIN_HEIGHT - PAUSE_FRLEN[1]) / 2
 PAUSE_FRCOLOR = r, g, b = 12, 44, 55
 PAUSE_OPCOLOR = r, g, b = 90, 42, 66
 PAUSE_SELECT_COLOR = r, g, b = 90, 0, 66
 PAUSE_TXTCOLOR = r, g, b = 0, 4, 100
-PAUSE_OPLEN = width, height = PAUSE_FRLEN[0]/4, PAUSE_FRLEN[1]/10
-PAUSE_OPGAP = PAUSE_FRLEN[0]/30
-PAUSE_OPPOS = x, y = PAUSE_FRPOS[0] + (PAUSE_FRLEN[0] - PAUSE_OPLEN[0]) / \
-    2, PAUSE_FRPOS[1] + (PAUSE_FRLEN[1] - 2*(PAUSE_OPLEN[1]+PAUSE_OPGAP))/2
+PAUSE_OPLEN = width, height = PAUSE_FRLEN[0] / 4, PAUSE_FRLEN[1] / 10
+PAUSE_OPGAP = PAUSE_FRLEN[0] / 30
+PAUSE_OPPOS = x, y = (
+    PAUSE_FRPOS[0] + (PAUSE_FRLEN[0] - PAUSE_OPLEN[0]) / 2,
+    PAUSE_FRPOS[1] + (PAUSE_FRLEN[1] - 2 * (PAUSE_OPLEN[1] + PAUSE_OPGAP)) / 2,
+)
 
 # game-over
-GO_FRLEN = width, height = WIN_WIDTH/2, WIN_HEIGHT/2
-GO_FRPOS = x, y = (WIN_WIDTH - GO_FRLEN[0])/2, (WIN_HEIGHT - GO_FRLEN[1])/2
+GO_FRLEN = width, height = WIN_WIDTH / 2, WIN_HEIGHT / 2
+GO_FRPOS = x, y = (WIN_WIDTH - GO_FRLEN[0]) / 2, (WIN_HEIGHT - GO_FRLEN[1]) / 2
 GO_FRCOLOR = r, g, b = 12, 44, 55
 GO_FR_TXTCOLOR = r, g, b = 48, 90, 22
 GO_OPCOLOR = r, g, b = 90, 42, 66
 GO_SELECT_COLOR = r, g, b = 90, 0, 66
 GO_TXTCOLOR = r, g, b = 0, 4, 100
-GO_OPLEN = width, height = GO_FRLEN[0]/4, GO_FRLEN[1]/10
-GO_OPGAP = GO_FRLEN[0]/30
-GO_OPPOS = x, y = GO_FRPOS[0] + \
-    (GO_FRLEN[0] - GO_OPLEN[0])/2, GO_FRPOS[1] + GO_FRLEN[1]/2
+GO_OPLEN = width, height = GO_FRLEN[0] / 4, GO_FRLEN[1] / 10
+GO_OPGAP = GO_FRLEN[0] / 30
+GO_OPPOS = x, y = (
+    GO_FRPOS[0] + (GO_FRLEN[0] - GO_OPLEN[0]) / 2,
+    GO_FRPOS[1] + GO_FRLEN[1] / 2,
+)
 
 # game
 GAME_BGCOLOR = r, g, b = 50, 50, 50
-GRID_COUNT = 20
+GRID_COUNT = 50
 GRID_SIZE = WIN_WIDTH / GRID_COUNT
 
 # snakes
-SNAKES_SHAPE = ['square', 'square']
+SNAKES_SHAPE = ["square", "square"]
 SNAKES_COLOR = [(255, 255, 255), (255, 255, 255)]
 SNAKES_INIT_LEN = [10, 10]
 SNAKES_INIT_DIR = [DOWN, DOWN]
 SNAKES_INIT_GRID = [(15, 5), (5, 15)]
 SNAKES_THICKNESS = GRID_SIZE
-SNAKES_KEYS = [{LEFT: A_KEY, RIGHT: D_KEY, UP: W_KEY, DOWN: S_KEY},
-               {LEFT: LEFT_ARROW, RIGHT: RIGHT_ARROW, UP: UP_ARROW, DOWN: DOWN_ARROW}]  # adws , arrows
-SNAKES_MAX_COUNTER = [100, 100]
+SNAKES_KEYS = [
+    {LEFT: A_KEY, RIGHT: D_KEY, UP: W_KEY, DOWN: S_KEY},
+    {LEFT: LEFT_ARROW, RIGHT: RIGHT_ARROW, UP: UP_ARROW, DOWN: DOWN_ARROW},
+]  # adws , arrows
+SNAKES_MAX_COUNTER = [30, 100]
 
 # key
 PLAYER1_LEFT = 97  # a
