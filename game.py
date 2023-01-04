@@ -25,6 +25,7 @@ class Snake():
         self.eat_index = 0
         self.index = index
         self.score = 0
+        self.init_draw = True
         self.add_init_parts()
 
     def add_init_parts(self):
@@ -157,6 +158,48 @@ class Snake():
                         RETURN = game_over(game_info)
                         PLAY = False
                         
+    # def init_draw(self):
+    #     last_index = len(self.parts) -1
+    #     for index, part in enumerate(self.parts):
+    #         if index != last_index:
+    #             pygame.draw.rect(screen, self.color, pygame.Rect(part[0] * GRID_SIZE , part[1] * GRID_SIZE , GRID_SIZE, GRID_SIZE))
+    def mid_part_draw(self):
+        last_index = len(self.parts) -1
+        for index, part in enumerate(self.parts):
+            if index != last_index and index != 0:
+                pygame.draw.rect(screen, self.color, pygame.Rect(part[0] * GRID_SIZE , part[1] * GRID_SIZE , GRID_SIZE, GRID_SIZE))
+
+    def smooth_draw_enhanced(self):
+        layer = self.counter / self.max_counter * GRID_SIZE
+        last_index = len(self.parts) - 1
+        head = self.parts[0]
+        tail = self.parts[last_index]
+
+        if self.init_draw:
+            print('aaa')
+            self.init_draw = False
+            self.mid_part_draw()
+
+        if self.eat == False:
+            pygame.draw.rect(screen, GAME_BGCOLOR, pygame.Rect(tail[0] * GRID_SIZE , tail[1] * GRID_SIZE , GRID_SIZE, GRID_SIZE))
+            if self.tail_dir == UP:
+                pygame.draw.rect(screen, self.color, pygame.Rect(tail[0] * GRID_SIZE , tail[1] * GRID_SIZE  , GRID_SIZE, GRID_SIZE - layer))
+            if self.tail_dir == DOWN:
+                pygame.draw.rect(screen, self.color, pygame.Rect(tail[0] * GRID_SIZE , tail[1] * GRID_SIZE + layer , GRID_SIZE, GRID_SIZE ))
+            if self.tail_dir == LEFT:
+                pygame.draw.rect(screen, self.color, pygame.Rect(tail[0] * GRID_SIZE , tail[1] * GRID_SIZE , GRID_SIZE - layer, GRID_SIZE ))
+            if self.tail_dir == RIGHT:
+                pygame.draw.rect(screen, self.color, pygame.Rect(tail[0] * GRID_SIZE + layer , tail[1] * GRID_SIZE , GRID_SIZE , GRID_SIZE ))
+
+        if self.dir == UP:
+            pygame.draw.rect(screen, self.color, pygame.Rect(head[0] * GRID_SIZE , (head[1]+1) * GRID_SIZE  - layer, GRID_SIZE,  layer*1.5))
+        if self.dir == DOWN:
+            pygame.draw.rect(screen, self.color, pygame.Rect(head[0] * GRID_SIZE , head[1] * GRID_SIZE , GRID_SIZE, layer))
+        if self.dir == LEFT:
+            pygame.draw.rect(screen, self.color, pygame.Rect((head[0]+1) * GRID_SIZE -layer , head[1] * GRID_SIZE , layer*1.5, GRID_SIZE ))
+        if self.dir == RIGHT:
+            pygame.draw.rect(screen, self.color, pygame.Rect(head[0] * GRID_SIZE, head[1] * GRID_SIZE , layer, GRID_SIZE ))
+
 
     def smooth_draw(self):
         layer = self.counter / self.max_counter * GRID_SIZE
@@ -217,6 +260,7 @@ class Food():
 
 
 def the_game(players):
+    screen.fill(GAME_BGCOLOR)
     global PLAYERS
     global PLAY
     PLAY = True
@@ -228,10 +272,10 @@ def the_game(players):
         Snake.snakes.append(Snake(SNAKES_COLOR[index], SNAKES_INIT_LEN[index],
                 SNAKES_INIT_DIR[index],SNAKES_INIT_GRID[index],
                 SNAKES_MAX_COUNTER[index],SNAKES_KEYS[index],index))
+        # Snake.snakes[index].init_draw()
         foods.append(Food(FOOD_COLOR,Snake.snakes))
 
     while PLAY:
-        screen.fill(GAME_BGCOLOR)
 
         # clock.tick(900)
         pygame.time.wait(1)
@@ -239,9 +283,11 @@ def the_game(players):
         for event in pygame.event.get():
             if event.type == pygame.QUIT: sys.exit()
             if event.type == pygame.KEYDOWN:
-                print(event.key)
                 if event.key == ESC_KEY:
                     res = pause_game()
+                    screen.fill(GAME_BGCOLOR)
+                    for snake in Snake.snakes:
+                        snake.init_draw = True
                     if res == MENU:
                         PLAY = False
                 for snake in Snake.snakes:
@@ -257,7 +303,8 @@ def the_game(players):
                 snake.check_collision()
                 snake.check_eat(foods)
                 snake.update_tail_dir()
-            snake.smooth_draw()
+            # snake.smooth_draw()
+            snake.smooth_draw_enhanced()
             snake.counter += 1
 
         for food in foods:
@@ -267,5 +314,7 @@ def the_game(players):
         pygame.display.flip()
 
     return RETURN
+
+
 
 
