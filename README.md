@@ -15,10 +15,7 @@ Snake movement is smooth, appearance is simple and appropriate and also there is
 
 ### Running executable file (Method 1)
 
-For both Windows and Linux an executable file was made using pyinstaller so you can just download and run the game without any Requirements.
-
-- [for windows](https://mega.nz/file/HrgHBZxB#xPiS2B0Unq-hnw0upVzuX0NStGk7j53p_oGtatdZdto)
-- [for linux](https://mega.nz/file/Hq4hTTzB#lrq8g_Gf7OGVmSqLg0vEYcmBEaWjJSYatvuBFaNCSus)
+For both Windows and Linux an executable file was made using pyinstaller so you can just download and run the game without any Requirements from [Releases](https://github.com/dalmamad/snake-py/releases) Page.
 
 ### running the python script (Method 2)
 
